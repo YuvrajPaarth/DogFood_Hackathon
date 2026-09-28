@@ -1,0 +1,20 @@
+[portal]
+base_url = "http://localhost:8080"
+
+[tiers]
+claimed = ["T1", "T2"]
+pitch = "Self-hostable hackathon platform: auth, roles, submissions, judging, z-score normalization, CSV export."
+
+[auth]
+# Tokens expire after 24h. Restart server to get fresh ones printed to stdout.
+organizer   = "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvcmdhbml6ZXJAc2VlZC5kb2dmb29kIiwicm9sZSI6Im9yZ2FuaXplciIsImV4cCI6MTc5MDY3Mjc2MX0.yPsc6hoLrDgD3CQ1EJCQbvCL_gt_-7Bq6GO1GRcn304"
+judge_a     = "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqdWRnZV9hQHNlZWQuZG9nZm9vZCIsInJvbGUiOiJqdWRnZSIsImV4cCI6MTc5MDY3Mjc2MX0.k4kmzodYa6H1kUOUKaq4OSr4LTdJwnGA2Se4RDqf1Rg"
+judge_b     = "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqdWRnZV9iQHNlZWQuZG9nZm9vZCIsInJvbGUiOiJqdWRnZSIsImV4cCI6MTc5MDY3Mjc2MX0.Q0ddawiZjpgBmC-6SNrfMUxLd-9u8_wbeJtFFaSCcPw"
+participant = "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwYXJ0aWNpcGFudEBzZWVkLmRvZ2Zvb2QiLCJyb2xlIjoicGFydGljaXBhbnQiLCJleHAiOjE3OTA2NzI3NjF9.PQQdfXUn6iwoOvlZLvWvjIsU-e9-hE1pkkmC54fr4E0"
+
+[routes]
+gallery      = "/gallery"
+submit       = "/projects/new"
+judge_scores = "/api/judge/scores"
+peer_scores  = "/api/judge/scores?judge=judge_a"
+csv_export   = "/api/export.csv"

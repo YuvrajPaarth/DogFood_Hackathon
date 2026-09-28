@@ -1,0 +1,116 @@
+{
+  "event": {
+    "id": "evt_01",
+    "name": "Sample Hack 2026",
+    "submissions_close": "2026-03-01T18:00:00Z"
+  },
+  "tracks": [
+    { "id": "trk_01", "name": "Developer tools" },
+    { "id": "trk_02", "name": "AI / ML" },
+    { "id": "trk_03", "name": "Open" }
+  ],
+  "judges": [
+    { "id": "jdg_01", "name": "Ada Okonkwo",    "email": "ada@example.org",    "tracks": ["trk_01"] },
+    { "id": "jdg_02", "name": "Ben Nakamura",   "email": "ben@example.org",    "tracks": ["trk_01", "trk_02"] },
+    { "id": "jdg_03", "name": "Caro Diaz",      "email": "caro@example.org",   "tracks": ["trk_02"] },
+    { "id": "jdg_04", "name": "David Osei",     "email": "david@example.org",  "tracks": ["trk_03"] }
+  ],
+  "teams": [
+    { "id": "tm_01", "name": "Nightshift",    "members": ["ada@example.org"] },
+    { "id": "tm_02", "name": "ByteBenders",   "members": ["ben@example.org"] },
+    { "id": "tm_03", "name": "Stack Overflow","members": ["caro@example.org"] },
+    { "id": "tm_04", "name": "Null Pointers", "members": ["david@example.org"] },
+    { "id": "tm_05", "name": "Async Await",   "members": ["ada@example.org", "ben@example.org"] }
+  ],
+  "projects": [
+    {
+      "id": "prj_01", "team": "tm_01", "track": "trk_01",
+      "title": "Quiet Hours",
+      "summary": "A developer tool for focus time management.",
+      "repo_url": "https://github.com/example/quiet-hours",
+      "submitted_at": "2026-02-28T22:14:00Z"
+    },
+    {
+      "id": "prj_02", "team": "tm_02", "track": "trk_01",
+      "title": "Patch Wizard",
+      "summary": "Automated patch management for microservices.",
+      "repo_url": "https://github.com/example/patch-wizard",
+      "submitted_at": "2026-02-27T15:30:00Z"
+    },
+    {
+      "id": "prj_03", "team": "tm_03", "track": "trk_02",
+      "title": "VectorDB Lite",
+      "summary": "Embedded vector database for small-scale AI apps.",
+      "repo_url": "https://github.com/example/vectordb-lite",
+      "submitted_at": "2026-02-26T09:00:00Z"
+    },
+    {
+      "id": "prj_04", "team": "tm_04", "track": "trk_03",
+      "title": "LogStream",
+      "summary": "Real-time log aggregation with a clean UI.",
+      "repo_url": "https://github.com/example/logstream",
+      "submitted_at": "2026-02-25T18:45:00Z"
+    },
+    {
+      "id": "prj_05", "team": "tm_05", "track": "trk_02",
+      "title": "Prompt Bench",
+      "summary": "Benchmarking tool for LLM prompts.",
+      "repo_url": "https://github.com/example/prompt-bench",
+      "submitted_at": "2026-02-28T12:00:00Z"
+    },
+    {
+      "id": "prj_06", "team": "tm_01", "track": "trk_01",
+      "title": "DevDash",
+      "summary": "Unified developer dashboard for GitHub and Jira.",
+      "repo_url": "https://github.com/example/devdash",
+      "submitted_at": "2026-02-24T20:00:00Z"
+    }
+  ],
+  "scores": [
+    {
+      "judge": "jdg_01", "project": "prj_01",
+      "criteria": { "functionality": 8, "quality": 7 },
+      "comment": "Well-structured and functional."
+    },
+    {
+      "judge": "jdg_01", "project": "prj_02",
+      "criteria": { "functionality": 6, "quality": 5 },
+      "comment": "Good concept, needs polish."
+    },
+    {
+      "judge": "jdg_02", "project": "prj_01",
+      "criteria": { "functionality": 9, "quality": 8 },
+      "comment": "Excellent execution."
+    },
+    {
+      "judge": "jdg_02", "project": "prj_03",
+      "criteria": { "functionality": 7, "quality": 7 },
+      "comment": "Solid performance."
+    },
+    {
+      "judge": "jdg_03", "project": "prj_03",
+      "criteria": { "functionality": 5, "quality": 5 },
+      "comment": "Consistent mid-range."
+    },
+    {
+      "judge": "jdg_03", "project": "prj_05",
+      "criteria": { "functionality": 9, "quality": 9 },
+      "comment": "Outstanding work."
+    },
+    {
+      "judge": "jdg_04", "project": "prj_04",
+      "criteria": { "functionality": 6, "quality": 7 },
+      "comment": "Good UX focus."
+    },
+    {
+      "judge": "jdg_01", "project": "prj_04",
+      "criteria": { "functionality": 3, "quality": 3 },
+      "comment": ""
+    },
+    {
+      "judge": "jdg_02", "project": "prj_05",
+      "criteria": { "functionality": 8, "quality": 7 },
+      "comment": "Strong benchmark methodology."
+    }
+  ]
+}

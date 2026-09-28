@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DogFood Hackathon Platform</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; }
+    header { background: #1a1d2e; border-bottom: 1px solid #2d3748; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+    header h1 { font-size: 1.2rem; color: #e53e3e; letter-spacing: 0.05em; }
+    nav a { color: #a0aec0; text-decoration: none; margin-left: 20px; font-size: 0.9rem; }
+    nav a:hover { color: #fff; }
+    .hero { padding: 60px 32px 40px; text-align: center; }
+    .hero h2 { font-size: 2rem; margin-bottom: 12px; }
+    .hero p { color: #a0aec0; max-width: 500px; margin: 0 auto 24px; }
+    .btn { display: inline-block; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; border: none; }
+    .btn-primary { background: #e53e3e; color: #fff; }
+    .btn-secondary { background: #2d3748; color: #e2e8f0; margin-left: 10px; }
+    .btn:hover { opacity: 0.85; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 32px 60px; }
+    .section-title { font-size: 1.1rem; font-weight: 600; margin: 32px 0 16px; color: #e53e3e; text-transform: uppercase; letter-spacing: 0.08em; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .card { background: #1a1d2e; border: 1px solid #2d3748; border-radius: 8px; padding: 20px; }
+    .card h3 { font-size: 1rem; margin-bottom: 8px; }
+    .card p { color: #718096; font-size: 0.85rem; line-height: 1.6; }
+    .card .tag { display: inline-block; background: #2d3748; color: #a0aec0; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; margin-top: 10px; margin-right: 4px; }
+    .card a { color: #e53e3e; font-size: 0.82rem; text-decoration: none; }
+    .loading { color: #718096; text-align: center; padding: 40px; }
+    .error { color: #fc8181; text-align: center; padding: 40px; }
+    #auth-panel { background: #1a1d2e; border: 1px solid #2d3748; border-radius: 8px; padding: 24px; max-width: 400px; margin: 0 auto 32px; }
+    #auth-panel h3 { margin-bottom: 16px; }
+    input { width: 100%; padding: 8px 12px; background: #0f1117; border: 1px solid #2d3748; color: #e2e8f0; border-radius: 6px; margin-bottom: 10px; font-size: 0.9rem; }
+    input:focus { outline: none; border-color: #e53e3e; }
+    .status-bar { background: #1a1d2e; border-bottom: 1px solid #2d3748; padding: 8px 32px; font-size: 0.8rem; color: #a0aec0; display: flex; gap: 16px; }
+    .status-bar span { color: #68d391; }
+    #search { margin-bottom: 16px; }
+    #search input { max-width: 360px; margin-bottom: 0; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚡ DOGFOOD PLATFORM</h1>
+  <nav>
+    <a href="#gallery" onclick="showGallery()">Gallery</a>
+    <a href="#submit" onclick="showSubmit()">Submit</a>
+    <a href="#judge" onclick="showJudge()">Judge</a>
+    <a href="http://localhost:8080/docs" target="_blank">API Docs</a>
+  </nav>
+</header>
+
+<div class="status-bar">
+  <div>Status: <span id="status-text">Connecting...</span></div>
+  <div>User: <span id="user-text">Not logged in</span></div>
+</div>
+
+<div class="hero">
+  <h2>Hackathon Submission & Judging Platform</h2>
+  <p>Submit projects, judge submissions, and export results. Fully self-hosted.</p>
+  <button class="btn btn-primary" onclick="showGallery()">Browse Projects</button>
+  <button class="btn btn-secondary" onclick="showLogin()">Login</button>
+</div>
+
+<div class="container">
+
+  <!-- LOGIN PANEL -->
+  <div id="login-section" style="display:none">
+    <div id="auth-panel">
+      <h3>Login</h3>
+      <input type="email" id="login-email" placeholder="Email">
+      <input type="password" id="login-password" placeholder="Password">
+      <button class="btn btn-primary" onclick="doLogin()" style="width:100%">Login</button>
+      <p id="login-msg" style="margin-top:10px;font-size:0.85rem;color:#fc8181"></p>
+      <hr style="border-color:#2d3748;margin:16px 0">
+      <p style="font-size:0.8rem;color:#718096">Seed accounts:</p>
+      <p style="font-size:0.78rem;color:#718096;margin-top:6px">organizer@seed.dogfood / organizer-pass-dogfood</p>
+      <p style="font-size:0.78rem;color:#718096">judge_a@seed.dogfood / judge-a-pass-dogfood</p>
+      <p style="font-size:0.78rem;color:#718096">participant@seed.dogfood / participant-pass-dogfood</p>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div id="gallery-section">
+    <div class="section-title">Public Gallery</div>
+    <div id="search"><input type="text" id="search-input" placeholder="Search projects..." oninput="filterGallery()"></div>
+    <div id="gallery-container" class="card-grid">
+      <div class="loading">Loading projects...</div>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div id="submit-section" style="display:none">
+    <div class="section-title">Submit Project</div>
+    <div id="auth-panel">
+      <p style="color:#a0aec0;font-size:0.85rem;margin-bottom:16px">Login as a participant, then submit your project.</p>
+      <input type="number" id="sub-team-id" placeholder="Your Team ID">
+      <input type="text" id="sub-title" placeholder="Project Title">
+      <input type="text" id="sub-desc" placeholder="Description">
+      <input type="url" id="sub-repo" placeholder="Repository URL">
+      <button class="btn btn-primary" onclick="doSubmit()" style="width:100%">Submit Project</button>
+      <p id="submit-msg" style="margin-top:10px;font-size:0.85rem"></p>
+    </div>
+  </div>
+
+  <!-- JUDGE -->
+  <div id="judge-section" style="display:none">
+    <div class="section-title">Judge Console</div>
+    <div id="scores-container" class="loading">Login as a judge to see your scores.</div>
+  </div>
+
+</div>
+
+<script>
+  const API = 'http://localhost:8080';
+  let token = localStorage.getItem('token') || '';
+  let currentUser = null;
+  let allProjects = [];
+
+  // ── Startup ──────────────────────────────────────────────────────────────
+  window.onload = async () => {
+    try {
+      const r = await fetch(API + '/health');
+      document.getElementById('status-text').textContent = r.ok ? 'Online ✓' : 'Error';
+    } catch { document.getElementById('status-text').textContent = 'Offline'; }
+
+    if (token) await refreshMe();
+    loadGallery();
+  };
+
+  async function refreshMe() {
+    try {
+      const r = await fetch(API + '/auth/me', { headers: { Authorization: token } });
+      if (r.ok) {
+        currentUser = await r.json();
+        document.getElementById('user-text').textContent = `${currentUser.username} (${currentUser.role})`;
+      }
+    } catch {}
+  }
+
+  // ── Navigation ────────────────────────────────────────────────────────────
+  function hideAll() {
+    ['gallery-section','login-section','submit-section','judge-section'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
+    });
+  }
+  function showGallery() { hideAll(); document.getElementById('gallery-section').style.display = ''; loadGallery(); }
+  function showLogin()   { hideAll(); document.getElementById('login-section').style.display = ''; }
+  function showSubmit()  { hideAll(); document.getElementById('submit-section').style.display = ''; }
+  function showJudge()   { hideAll(); document.getElementById('judge-section').style.display = ''; loadScores(); }
+
+  // ── Gallery ───────────────────────────────────────────────────────────────
+  async function loadGallery() {
+    const c = document.getElementById('gallery-container');
+    try {
+      const r = await fetch(API + '/gallery');
+      const d = await r.json();
+      allProjects = d.projects || [];
+      renderProjects(allProjects);
+    } catch (e) {
+      c.innerHTML = `<div class="error">Could not load gallery. Is the server running?</div>`;
+    }
+  }
+
+  function renderProjects(projects) {
+    const c = document.getElementById('gallery-container');
+    if (!projects.length) { c.innerHTML = '<div class="loading">No projects yet.</div>'; return; }
+    c.innerHTML = projects.map(p => `
+      <div class="card">
+        <h3>${esc(p.title)}</h3>
+        <p>${esc(p.description || 'No description.')}</p>
+        <div>
+          ${p.track ? `<span class="tag">${esc(p.track)}</span>` : ''}
+          ${p.team  ? `<span class="tag">Team: ${esc(p.team)}</span>` : ''}
+        </div>
+        ${p.repo_url ? `<div style="margin-top:10px"><a href="${esc(p.repo_url)}" target="_blank">→ Repository</a></div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  function filterGallery() {
+    const q = document.getElementById('search-input').value.toLowerCase();
+    renderProjects(q ? allProjects.filter(p => p.title.toLowerCase().includes(q) || (p.description||'').toLowerCase().includes(q)) : allProjects);
+  }
+
+  // ── Login ─────────────────────────────────────────────────────────────────
+  async function doLogin() {
+    const email = document.getElementById('login-email').value;
+    const pass  = document.getElementById('login-password').value;
+    const msg   = document.getElementById('login-msg');
+    try {
+      const r = await fetch(API + '/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `username=${encodeURIComponent(email)}&password=${encodeURIComponent(pass)}`,
+      });
+      const d = await r.json();
+      if (r.ok) {
+        token = `Bearer ${d.access_token}`;
+        localStorage.setItem('token', token);
+        await refreshMe();
+        msg.style.color = '#68d391';
+        msg.textContent = `Logged in as ${currentUser?.role}`;
+      } else {
+        msg.textContent = d.detail || 'Login failed';
+      }
+    } catch { msg.textContent = 'Network error'; }
+  }
+
+  // ── Submit ────────────────────────────────────────────────────────────────
+  async function doSubmit() {
+    const msg = document.getElementById('submit-msg');
+    const body = {
+      team_id: parseInt(document.getElementById('sub-team-id').value),
+      title: document.getElementById('sub-title').value,
+      description: document.getElementById('sub-desc').value,
+      repo_url: document.getElementById('sub-repo').value,
+    };
+    try {
+      const r = await fetch(API + '/projects/new', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: token },
+        body: JSON.stringify(body),
+      });
+      const d = await r.json();
+      if (r.ok) {
+        msg.style.color = '#68d391';
+        msg.textContent = `Submitted! ID: ${d.id}`;
+      } else {
+        msg.style.color = '#fc8181';
+        msg.textContent = d.detail || 'Submission failed';
+      }
+    } catch { msg.style.color = '#fc8181'; msg.textContent = 'Network error'; }
+  }
+
+  // ── Judge Scores ──────────────────────────────────────────────────────────
+  async function loadScores() {
+    const c = document.getElementById('scores-container');
+    if (!token) { c.innerHTML = '<div class="loading">Please login as a judge first.</div>'; return; }
+    try {
+      const r = await fetch(API + '/api/judge/scores', { headers: { Authorization: token } });
+      if (r.status === 403) { c.innerHTML = '<div class="error">Access denied. You need judge or organizer role.</div>'; return; }
+      const d = await r.json();
+      const scores = d.scores || [];
+      if (!scores.length) { c.innerHTML = '<div class="loading">No scores yet.</div>'; return; }
+      c.innerHTML = `<div class="card-grid">${scores.map(s => `
+        <div class="card">
+          <h3>${esc(s.submission_title || 'Submission ' + s.submission_id)}</h3>
+          <p>Rubric: ${esc(s.rubric || '')} — Score: <strong>${s.score}</strong></p>
+          ${s.comment ? `<p style="margin-top:8px">${esc(s.comment)}</p>` : ''}
+        </div>
+      `).join('')}</div>`;
+    } catch { c.innerHTML = '<div class="error">Failed to load scores.</div>'; }
+  }
+
+  // ── Utils ─────────────────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+</body>
+</html>

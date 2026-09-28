@@ -1,0 +1,43 @@
+DOGFOOD 2026 acceptance report
+portal: http://localhost:8080
+claimed: T1 T2
+fixtures: fixtures.json
+
+T1  gallery is public ................. PASS
+       GET http://localhost:8080/gallery  no auth header
+       got 200
+
+T1  project from fixtures shown ....... PASS
+       GET http://localhost:8080/gallery  no auth header
+       body contains "Quiet Hours" (fixture project title)
+
+T1  closed event refuses submissions .. PASS
+       POST http://localhost:8080/projects/new  as participant
+       got 422, wanted 4xx
+       detail: "Submissions closed at 2026-03-01T18:00:00Z"
+
+T2  judge sees own scores ............. PASS
+       GET http://localhost:8080/api/judge/scores  as judge_a
+       got 200
+
+T2  judge cannot see peer scores ...... PASS
+       GET http://localhost:8080/api/judge/scores?judge=judge_a  as judge_b
+       got 403, wanted 401 or 403
+       detail: "Judges cannot view another judge's scores"
+
+T2  participant blocked ............... PASS
+       GET http://localhost:8080/api/judge/scores  as participant
+       got 403, wanted 401 or 403
+       detail: "Only judges and organizers can access scores"
+
+T2  csv export works .................. PASS
+       GET http://localhost:8080/api/export.csv  as organizer
+       got 200
+       body starts with: submission_id,submission_title,team,track,...
+
+claimed T1 T2, verified T1 T2
+
+NOTE: JWT tokens in .dogfood.toml expire after 24 hours.
+If re-running the checker, restart the server (docker compose restart backend
+or uvicorn main:app) and update .dogfood.toml with the fresh tokens printed
+to stdout at startup.
